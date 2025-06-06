@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.all-example-chart {
+  padding-bottom: 10px;
+}
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #0F44BE !important; /* Change this color to your desired active tab color */
+}
+
+.custom-select {
+  width: 100%;
+  height: 40px; /* Set height */
+  background-color: #EDF1F6; /* Background color */
+  padding: 0 12px; /* Adjust padding */
+  border: none; /* Remove border */
+  border-radius: 0.5rem; /* Equivalent to rounded-lg */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
+  outline: none;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.custom-select:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring effect */
+}
+
+.custom-select.error {
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5); /* Red focus ring for errors */
+}
+
+
+/* .ant-tabs-tab {
+  width: max-content;
+}
+
+:where(.css-dev-only-do-not-override-1yacf91).ant-tabs .ant-tabs-tab+.ant-tabs-tab {
+  margin: 0px;
+  padding: 0px 22px;
+}
+
+.ant-tabs-tab .ant-tabs-tab-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6D6D6D;
+  line-height: 20px;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F44BE !important;
+} */
+
+/* 
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('./font-montserrat/Montserrat-Regular.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('./font-montserrat/Montserrat-Bold.ttf') format('truetype');
+  } 
+
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('./font-montserrat/Montserrat-Medium.ttf') format('truetype');
+  }   
+
+  @font-face {
+    font-family: 'Montserrat';
+    src: url('./font-montserrat/Montserrat-SemiBold.ttf') format('truetype');
+  } */
