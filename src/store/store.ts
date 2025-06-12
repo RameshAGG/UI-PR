@@ -8,7 +8,7 @@ import dashboardReducer from '../slices/dashboardSlice.ts';
 import MeterialMasterSlice from "../slices/MeterialMasterSlice.ts";
 import materialListMasterSlice from "../slices/MaterialListMasterSlice.ts";
 import PriorityMasterSlice from "../slices/PriorityMasterSlice.ts";
-import RoleMaster from "../screens/Masters/RoleMaster.tsx";
+// import RoleMaster from "../screens/Masters/RoleMaster.tsx";
 import RoleMasterslice from "../slices/RoleMasterslice.ts";
 import MaterialRequestSlice from "../slices/MaterialRequestSlice.ts";
 import materialAllocationSlice from "../slices/MaterialAllocationSlice.ts";
@@ -19,8 +19,29 @@ import vendorManagementSlice from '../slices/VendorManagement.Slice.ts';
 import breadcrumbReducer from '../slices/BreadcrumbSlice.ts';
 import repetitionReducer from '../slices/RepititionSlice.ts';
 import HandOverSlice from '../slices/HandOverslice.ts';
-const store = configureStore({
-    reducer: {
+
+
+
+
+    import requestReducer from '../slices/RequestSlice.ts';
+    import itemReducer from '../slices/itemSlice.ts';
+    import SupplierSlice from '../slices/SupplierSlice.ts';
+
+
+    const store = configureStore({
+        reducer: {
+            requestManagement: requestReducer,
+            items: itemReducer, // ✅ register here
+            suppliers: SupplierSlice,
+
+
+
+
+
+
+
+
+
         userRegister: userRegisterSlice,
         materialCategory:MaterialCategorySlice,
         MasterSlice:MasterSlice,

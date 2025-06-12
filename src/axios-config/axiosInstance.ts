@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import { decryptData } from '../storageHelper.ts';
 
 const Axios = axios.create({
-  baseURL: 'http://localhost:4000/api', // Set your base URL here
+  baseURL: 'http://localhost:4000', // Removed /api since it's not needed
   // baseURL: 'http://13.202.234.244:4000/api' // Set your base URL here
 
 });
