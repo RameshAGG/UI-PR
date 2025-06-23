@@ -26,14 +26,14 @@ import HandOverSlice from '../slices/HandOverslice.ts';
     import requestReducer from '../slices/RequestSlice.ts';
     import itemReducer from '../slices/itemSlice.ts';
     import SupplierSlice from '../slices/SupplierSlice.ts';
-
+    // import rfqDataReducer from '../slices/RfqDataSlice';
 
     const store = configureStore({
         reducer: {
             requestManagement: requestReducer,
             items: itemReducer, // ✅ register here
             suppliers: SupplierSlice,
-
+            // rfqData: rfqDataReducer,
 
 
 

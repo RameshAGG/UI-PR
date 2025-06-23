@@ -8,9 +8,13 @@ import SiteManagementPreview from "../screens/Managements/Sitemanagement_preview
 import ForgetPassword from "../screens/forgetpassword.tsx";
 import AuthGuard from '../../src/components/AuthGuard.tsx';
 import Requests from "../screens/requests/Requests.tsx";
-import Items from "../screens/Managements/Items.tsx";
+import Items from "../screens/Managements/RFQ.tsx";
 import RequestPreview from "../screens/requests/RequestPreview.tsx";
 import CreateRequestPage from "../screens/requests/CreateRequestPage.tsx";
+import BulkUpload from "../screens/Bulk_Upload/BulkUpload.tsx";
+import RfqRequestPreview from "../screens/requests/RfqRequestPreview.tsx";
+import RFQ_Upload from "../screens/Managements/RFQ_Upload.tsx";
+import RfqUploadPriview from "../screens/requests/RfqUploadPriview.tsx";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -23,13 +27,18 @@ const AppRoutes = () => {
             {/* <Route element={<AuthGuard><LayoutComponent /></AuthGuard>}> */}
             <Route element={<LayoutComponent />}>
 
-                <Route path="items" element={<Items />} />
+                <Route path="rfq" element={<Items />} />
                 <Route path="requests" element={<Requests />} />
+                <Route path="Rfq_Upload" element={<RFQ_Upload />} />
                 <Route path="requestpreview" element={<RequestPreview />} />
                 <Route path="site-management" element={<SiteManagement />} />
+                <Route path="bulkupload" element={<BulkUpload />} />
               
 {/* <Route path="/requests/new" element={<CreateRequestPage />} /> */}
 {/* <Route path="/requests/edit/:id" element={<EditRequestPage />} /> */}
+                <Route path="/purchase-request/:id" element={<RequestPreview />} />
+                <Route path="/Rfq_RequestPreview/:id" element={<RfqRequestPreview />} />
+                <Route path="/Rfq_UploadPreview/:id" element={<RfqUploadPriview />} />
                 <Route path="site-management-preview/:siteId" element={<SiteManagementPreview />} />
                 <Route path="/masters/material-category-master" element={< MaterialCategoryMaster />} />
             </Route>

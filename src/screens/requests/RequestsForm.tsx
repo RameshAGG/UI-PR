@@ -11,6 +11,7 @@ import RequiredLabel from '../../components/common/RequiredLabel.tsx';
 import FormInput from '../../components/common/FormInput.tsx';
 import MapComponent from '../../components/common/map/GoogleMap.tsx';
 import { Input } from 'antd';
+import { TrashIcon } from 'lucide-react';
 
 interface ISupplierDetails {
   id: number;
@@ -82,6 +83,7 @@ interface RequestFormValues {
     itemName: string;
     category: string;
     subcategory: string;
+    quantity: number; // Add this line
     suppliers: {
       supplierId: number | null;
       supplierName: string;
@@ -374,6 +376,9 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
     });
     setFieldValue(`items.${index}.itemName`, selectedItem.item_name);
 
+      // If the item has quantity data, use it (adjust based on your API structure)
+  setFieldValue(`items.${index}.quantity`, selectedItem.details?.maintain_stock || 1);
+
     if (selectedItem.itemGroup && selectedItem.itemSubGroup) {
       setFieldValue(`items.${index}.category`, selectedItem.itemGroup.item_group_name);
       setFieldValue(`items.${index}.subcategory`, selectedItem.itemSubGroup.item_subgroup_name);
@@ -462,7 +467,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
 
   return (
     <Form>
-      <p className='text-[#0F44BE] mb-3'>Create New Purchase Request</p>
+      {/* <p className='text-[#0F44BE] mb-3'>Create New Purchase Request</p> */}
 
       {/* Show API errors if any */}
       {(itemsError || suppliersError) && (
@@ -474,7 +479,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
 
       {/* Basic Information Section */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4 text-[#0F44BE]">Basic Information</h3>
+        {/* <h3 className="text-lg font-semibold mb-4 text-[#0F44BE]">Basic Information</h3> */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <RequiredLabel>Department</RequiredLabel>
@@ -488,7 +493,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
             />
           </div>
           <div>
-            <RequiredLabel>Request Date</RequiredLabel>
+            <RequiredLabel>Required date</RequiredLabel>
             <input
               type="date"
               name="date_requested"
@@ -507,9 +512,9 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-4 text-[#0F44BE]">
           Purchase Items
-          <span className="text-sm font-normal text-gray-600 ml-2">
+          {/* <span className="text-sm font-normal text-gray-600 ml-2">
             ({items.length} items, {suppliers.length} suppliers available)
-          </span>
+          </span> */}
         </h3>
 
         <FieldArray name="items">
@@ -517,22 +522,25 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
             <div>
               {/* Table Header */}
               <div className="">
-                <table className="w-full border-collapse border border-gray-300">
+                <table className="w-full table-auto">
                   <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 px-4 py-2 text-left font-semibold">
+                    <tr className="">
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-left font-semibold">
                         <RequiredLabel>Item Name</RequiredLabel>
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left font-semibold">
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-left font-semibold">
                         <RequiredLabel>Category</RequiredLabel>
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left font-semibold">
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-left font-semibold">
                         <RequiredLabel>Subcategory</RequiredLabel>
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-center font-semibold">
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-left font-semibold">
+                        <RequiredLabel>Quantity</RequiredLabel>
+                      </th>
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-center font-semibold">
                         Suppliers
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-center font-semibold w-20">
+                      <th className="border border-gray-300 bg-blue-50 px-4 py-2 text-center font-semibold w-20">
                         Action
                       </th>
                     </tr>
@@ -542,7 +550,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                       <React.Fragment key={index}>
                         {/* Main Row */}
                         <tr className="hover:bg-gray-50">
-                          <td className="border border-gray-300 px-2 py-2">
+                          <td className="border-t border-b  border-gray-300 px-2 py-2">
                             <div className="flex flex-col gap-2">
                               {/* Toggle button */}
                               <button
@@ -576,6 +584,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                             onClick={() => handleItemSelect(index, item)}
                                           >
                                             {item.item_name}
+                                            <hr className='text-black' />
                                           </div>
                                         ))}
                                         {filteredItems(index).length === 0 && (
@@ -602,6 +611,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                     value={item.subcategory || ''}
                                     error={touched.items?.[index]?.subcategory && errors.items?.[index]?.subcategory}
                                   />
+                                  
                                 </div>
                               ) : (
                                 // Existing item selection
@@ -641,7 +651,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                               </div>
                             )}
                           </td>
-                          <td className="border border-gray-300 px-2 py-2">
+                          <td className="border-t border-b border-gray-300 px-2 py-2">
                             <FormInput
                               name={`items.${index}.category`}
                               type="text"
@@ -655,7 +665,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                               className="border-0 focus:ring-0 p-1"
                             />
                           </td>
-                          <td className="border border-gray-300 px-2 py-2">
+                          <td className="border-t border-b border-gray-300 px-2 py-2">
                             <FormInput
                               name={`items.${index}.subcategory`}
                               type="text"
@@ -669,14 +679,29 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                               className="border-0 focus:ring-0 p-1"
                             />
                           </td>
-                          <td className="border border-gray-300 px-2 py-2 text-center">
+                          <td className="border-t border-b border-gray-300 px-2 py-2">
+  <FormInput
+    name={`items.${index}.quantity`}
+    type="number"
+    min="1"
+    placeholder="Enter quantity"
+    onChange={handleChange}
+    value={item.quantity || 1}
+    error={
+      touched.items?.[index]?.quantity &&
+      errors.items?.[index]?.quantity
+    }
+    className="border-0 focus:ring-0 p-1 w-full"
+  />
+</td>
+                          <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                             <button
                               type="button"
                               onClick={() => {
                                 initializeSuppliers(index);
                                 toggleRowExpansion(index);
                               }}
-                              className="bg-[#0F44BE] hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 mx-auto transition-colors"
+                              className="bg-[#000] text-white px-3 py-1 rounded text-sm flex items-center gap-1 mx-auto transition-colors"
                             >
                               <span className={`transform transition-transform ${expandedRows.has(index) ? 'rotate-180' : ''}`}>
                                 ▼
@@ -689,15 +714,16 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                               )}
                             </button>
                           </td>
-                          <td className="border border-gray-300 px-2 py-2 text-center">
+                          <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                             {values.items.length > 1 && (
                               <button
                                 type="button"
                                 onClick={() => remove(index)}
-                                className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+                                className="text-red-500 px-2 py-1 rounded text-sm"
                                 title="Remove Item"
                               >
-                                ×
+                                {/* × */}
+                                <TrashIcon className="h-4 w-4 inline-block" />
                               </button>
                             )}
                           </td>
@@ -706,8 +732,8 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                         {/* Collapsible Supplier Row */}
                         {expandedRows.has(index) && (
                           <tr>
-                            <td colSpan={5} className="border border-gray-300 p-0">
-                              <div className="bg-gray-50 p-4">
+                            <td colSpan={5} className="border p-0">
+                              <div className="bg-white-50 p-4">
                                 <FieldArray name={`items.${index}.suppliers`}>
                                   {({ push: pushSupplier, remove: removeSupplier }) => (
                                     <div>
@@ -715,49 +741,29 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                         <h4 className="font-semibold text-[#0F44BE]">
                                           Suppliers for {item.itemName || 'this item'}
                                         </h4>
-
-                                        {/* Select All Checkbox */}
-                                        {item.suppliers && item.suppliers.length > 0 && (
-                                          <div className="flex items-center gap-2">
-                                            <label className="flex items-center gap-1 text-sm font-medium text-gray-700">
-                                              <input
-                                                type="checkbox"
-                                                checked={areAllSuppliersSelected(index)}
-                                                onChange={(e) => handleSelectAllSuppliers(index, e.target.checked)}
-                                                className="rounded border-gray-300 text-[#0F44BE] focus:ring-[#0F44BE]"
-                                              />
-                                              Select All
-                                            </label>
-                                            {getSelectedSuppliers(index).length > 0 && (
-                                              <span className="text-sm text-gray-600">
-                                                ({getSelectedSuppliers(index).length} selected)
-                                              </span>
-                                            )}
-                                          </div>
-                                        )}
                                       </div>
 
                                       {/* Supplier Table */}
                                       <div className="overflow-x-auto mb-3">
-                                        <table className="w-full border-collapse border border-gray-400">
+                                        <table className="w-full">
                                           <thead>
-                                            <tr className="bg-gray-200">
-                                              <th className="border border-gray-400 px-3 py-2 text-center font-semibold w-12">
+                                            <tr className="">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-center font-semibold w-12">
                                                 Select
                                               </th>
-                                              <th className="border border-gray-400 px-3 py-2 text-left font-semibold">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-left font-semibold">
                                                 Supplier Name
                                               </th>
-                                              <th className="border border-gray-400 px-3 py-2 text-left font-semibold">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-left font-semibold">
                                                 Supplier Email
                                               </th>
-                                              <th className="border border-gray-400 px-3 py-2 text-left font-semibold">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-left font-semibold">
                                                 Supplier Contact
                                               </th>
-                                              <th className="border border-gray-400 px-3 py-2 text-left font-semibold">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-left font-semibold">
                                                 Supplier Tel
                                               </th>
-                                              <th className="border border-gray-400 px-3 py-2 text-center font-semibold w-20">
+                                              <th className="border border-gray-300 bg-blue-50 px-3 py-2 text-center font-semibold w-20">
                                                 Action
                                               </th>
                                             </tr>
@@ -766,7 +772,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                             {/* Existing suppliers from API */}
                                             {suppliers.map((apiSupplier) => (
                                               <tr key={`api-${apiSupplier.id}`} className="hover:bg-gray-100">
-                                                <td className="border border-gray-400 px-2 py-2 text-center">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                                                   <input
                                                     type="checkbox"
                                                     checked={values.items[index]?.suppliers?.some(s => s.supplierId === apiSupplier.id && s.selected) || false}
@@ -791,28 +797,28 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="rounded border-gray-300 text-[#0F44BE] focus:ring-[#0F44BE]"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <div className="p-1">{apiSupplier.name}</div>
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <div className="p-1">{apiSupplier.email}</div>
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <div className="p-1">{apiSupplier.mob_num}</div>
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <div className="p-1">{apiSupplier.tel_num}</div>
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2 text-center">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                                                   {/* No action for API suppliers */}
                                                 </td>
                                               </tr>
                                             ))}
 
                                             {/* Manual suppliers */}
-                                            {item.suppliers?.map((supplier, supplierIndex) => (
+                                            {item.showManualSuppliers && item.suppliers?.map((supplier, supplierIndex) => (
                                               <tr key={supplierIndex} className="hover:bg-gray-100">
-                                                <td className="border border-gray-400 px-2 py-2 text-center">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                                                   <input
                                                     type="checkbox"
                                                     checked={supplier.selected}
@@ -820,7 +826,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="rounded border-gray-300 text-[#0F44BE] focus:ring-[#0F44BE]"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <FormInput
                                                     name={`items.${index}.suppliers.${supplierIndex}.supplierName`}
                                                     type="text"
@@ -830,7 +836,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="border-0 focus:ring-0 p-1 w-full"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <FormInput
                                                     name={`items.${index}.suppliers.${supplierIndex}.supplierEmail`}
                                                     type="email"
@@ -840,7 +846,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="border-0 focus:ring-0 p-1 w-full"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <FormInput
                                                     name={`items.${index}.suppliers.${supplierIndex}.supplierContact`}
                                                     type="text"
@@ -850,7 +856,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="border-0 focus:ring-0 p-1 w-full"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2">
                                                   <FormInput
                                                     name={`items.${index}.suppliers.${supplierIndex}.supplierTel`}
                                                     type="text"
@@ -860,15 +866,15 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                                     className="border-0 focus:ring-0 p-1 w-full"
                                                   />
                                                 </td>
-                                                <td className="border border-gray-400 px-2 py-2 text-center">
+                                                <td className="border-t border-b border-gray-300 px-2 py-2 text-center">
                                                   {item.suppliers && item.suppliers.length > 1 && (
                                                     <button
                                                       type="button"
                                                       onClick={() => removeSupplier(supplierIndex)}
-                                                      className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-sm"
+                                                      className="text-red-500 px-2 py-1 rounded text-sm"
                                                       title="Remove Supplier"
                                                     >
-                                                      ×
+                                                      <TrashIcon className="h-4 w-4 inline-block" />
                                                     </button>
                                                   )}
                                                 </td>
@@ -878,11 +884,21 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                         </table>
                                       </div>
 
+
+
                                       {/* Action Buttons */}
                                       <div className="flex gap-2">
                                         <button
                                           type="button"
-                                          onClick={() => handleAddNewSupplier(index)}
+                                          onClick={() => {
+                                            // setFieldValue(`items.${index}.showManualSuppliers`, true);
+                                            // handleAddNewSupplier(index)
+                                            if (!item.showManualSuppliers) {
+                                              setFieldValue(`items.${index}.showManualSuppliers`, true);
+                                            } else {
+                                              handleAddNewSupplier(index);
+                                            }
+                                          }}
                                           className="bg-black hover:bg-black-300 text-white px-3 py-2 rounded text-sm flex items-center gap-1"
                                         >
                                           <span className="text-sm">+</span>
@@ -890,17 +906,17 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                                         </button>
 
                                         {/* {getSelectedSuppliers(index).length > 0 && (
-                                          <button
-                                            type="button"
-                                            onClick={() => {
-                                              const selectedCount = getSelectedSuppliers(index).length;
-                                              alert(`${selectedCount} supplier(s) selected for ${item.itemName || 'this item'}`);
-                                            }}
-                                            className="bg-[#0F44BE] hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors"
-                                          >
-                                            View Selected ({getSelectedSuppliers(index).length})
-                                          </button>
-                                        )} */}
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                const selectedCount = getSelectedSuppliers(index).length;
+                                                alert(`${selectedCount} supplier(s) selected for ${item.itemName || 'this item'}`);
+                                              }}
+                                              className="bg-[#0F44BE] hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors"
+                                            >
+                                              View Selected ({getSelectedSuppliers(index).length})
+                                            </button>
+                                          )} */}
                                       </div>
                                     </div>
                                   )}
@@ -925,6 +941,7 @@ const SiteManagementForm: React.FC<RequestsFormProps> = ({
                       itemName: '',
                       category: '',
                       subcategory: '',
+                      quantity: 1, // Default to 1
                       suppliers: [{
                         supplierId: 0,
                         supplierName: '',

@@ -5,16 +5,18 @@ import { decryptData } from '../../storageHelper.ts';
 const { Sider } = Layout;
 
 const items = [
-  { key: "/item",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/item">Items</Link>,ability:"item" },
-  { key: "/request",icon: <img src="/assets/sidebarIcons/fluent_form-28-regular (3).svg" width="22" height="22"  alt="img"/>, label: <Link to="/request">Request</Link>,ability:"request" },
+  { key: "/requests",icon: <img src="/assets/sidebarIcons/fluent_form-28-regular (3).svg" width="22" height="22"  alt="img"/>, label: <Link to="/requests">Purchase Request</Link>,ability:"requests" },
+  { key: "/rfq",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/rfq">Rfq_lists</Link>,ability:"rfq" },
   // { key: "/site-management",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/site-management">Site Management</Link>,ability:"site-management" },
-  // {
-  //   key: "/master", icon: <img src="/assets/sidebarIcons/master.svg" width="22" height="22" alt="img" />, label: "Masters",
-  //   children: [
-  //     { key: "/masters/material-category-master", label: <Link to="/masters/material-category-master">Category Master</Link>,ability:"master" },
-  //   ],
-  //   ability: "master"
-  // }
+  { key: "/Rfq_Upload",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/Rfq_Upload">Rfq_Upload</Link>,ability:"Rfq_Upload" },
+  { key: "/bulkupload",icon: <img src="/assets/sidebarIcons/fluent_form-28-regular (3).svg" width="22" height="22"  alt="img"/>, label: <Link to="/bulkupload">Bulk Upload</Link>,ability:"bulkupload" },
+  {
+    key: "/master", icon: <img src="/assets/sidebarIcons/master.svg" width="22" height="22" alt="img" />, label: "Masters",
+    children: [
+      { key: "/masters/material-category-master", label: <Link to="/masters/material-category-master">Category Master</Link>,ability:"master" },
+    ],
+    ability: "master"
+  }
 ];
 //icon: <img src="/assets/sidebarIcons/Building.svg" width="22" height="22"  alt="img"/>,
 const Sidebar = () => {

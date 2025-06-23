@@ -1,0 +1,10 @@
+/* Add to your global CSS */
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
