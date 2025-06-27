@@ -617,9 +617,8 @@ import { getAllRequests, createPurchaseRequest, setOffset, setLimit, setSortFiel
 import RequestsForm from '../../screens/requests/RequestsForm.tsx';
 import { capitalizeFirstLetter } from '../../utils/util.service.ts';
 import { setBreadcrumbs } from '../../slices/BreadcrumbSlice.ts';
-import { getAllItems } from '../../slices/itemSlice.ts';
-import { getAllSuppliers } from '../../slices/SupplierSlice.ts';
 import PaginatedTable from '../../components/PaginatedTable';
+import { getAllItemPrices } from '../../slices/itemPricesSlice.ts';
 
 // Updated interface to match the new API response
 interface IRequestResponse {
@@ -718,9 +717,7 @@ const RequestsManagement: React.FC = () => {
   const [confirmationMessage, setConfirmationMessage] = useState("Do you want to submit the form?");
   const { requests, loading, error, dataCount, offset, limit } = useSelector((state: RootState) => state.requestManagement);
 
-  // Pagination and sorting state
-  // const [offset, setOffset] = useState(0);
-  // const [limit, setLimit] = useState(10);
+
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<number | null>(null);
 
@@ -733,23 +730,25 @@ const RequestsManagement: React.FC = () => {
   });
 
 
+  // In your component
+  // const handlePaginationChange = (page: number, pageSize: number) => {
 
-  // const handlePaginationChange = (page: number, newPageSize?: number) => {
+  //   const newOffset = (page - 1) * pageSize;
 
-  //   dispatch(setOffset(page - 1));
-  //   if (newPageSize && newPageSize !== limit) {
-  //     dispatch(setLimit(newPageSize));
-  //   }
+  //   dispatch(setOffset(newOffset));
+  //   dispatch(setLimit(pageSize));
   // };
 
-  // In your component
-  const handlePaginationChange = (page: number, pageSize: number) => {
-    // Calculate the correct offset (page-1 because AntD starts at 1)
-    const newOffset = (page - 1) * pageSize;
 
-    dispatch(setOffset(newOffset));
-    dispatch(setLimit(pageSize));
+
+  const handlePaginationChange = (page: number, newPageSize?: number) => {
+
+    dispatch(setOffset(page - 1));
+    if (newPageSize && newPageSize !== limit) {
+      dispatch(setLimit(newPageSize));
+    }
   };
+
 
   // Redux state - Update this to match your requests slice state structure
 
@@ -764,7 +763,7 @@ const RequestsManagement: React.FC = () => {
       itemName: '',
       category: '',
       subcategory: '',
-      quantity: 1, // Default to 1
+      quantity: '', // Default to 1
       suppliers: [{
         supplierId: 0,
         supplierName: '',
@@ -787,8 +786,8 @@ const RequestsManagement: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setOffset(0);
-  };
+    dispatch(setOffset(0));
+    };
 
   const handleRowClick = (request: IRequestResponse) => {
     try {
@@ -810,15 +809,19 @@ const RequestsManagement: React.FC = () => {
     }
 
     const { field, order } = sorter || {};
-    const sortOrderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : null;
+    // const sortOrderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : null;
+    const sortOrder = order === "ascend" ? 1 : -1;
 
     setSortConfig({
       key: field || "",
       order: order || null
     });
 
-    setSortField(field || null);
-    setSortOrder(sortOrderValue);
+    // setSortField(field || null);
+    // setSortOrder(sortOrderValue);\
+    dispatch(setSortField(field));
+    dispatch(setSortOrder(sortOrder));
+    dispatch(setOffset(offset));
   };
 
   // Fetch requests data
@@ -834,15 +837,6 @@ const RequestsManagement: React.FC = () => {
     dispatch(getAllRequests(payload));
   };
 
-  // useEffect(() => {
-  //   dispatch(getAllRequests({
-  //     offset: offset,
-  //     limit: limit,
-  //     sortField: sortConfig.key ?? null,
-  //     sortOrder: sortConfig.order && sortConfig.order === 'ascend' ? 1 : sortConfig.order === 'descend' ? -1 : null,
-  //     searchInput: query
-  //   }));
-  // }, [dispatch, offset, limit, sortConfig, query]);
 
   useEffect(() => {
     fetchRequestsData();
@@ -896,8 +890,7 @@ const RequestsManagement: React.FC = () => {
   useEffect(() => {
     if (isSideSheetOpen) {
       console.log('Side sheet opened, triggering API calls...');
-      dispatch(getAllItems({}));
-      dispatch(getAllSuppliers({}));
+      dispatch(getAllItemPrices({}));
     }
   }, [isSideSheetOpen, dispatch]);
 
@@ -1030,36 +1023,214 @@ const RequestsManagement: React.FC = () => {
     },
   ];
 
-  const requestSchema = yup.object().shape({
+  // const requestSchema = yup.object().shape({
+  //   department: yup.string()
+  //     .required("Department is required"),
+  //   date_requested: yup.date()
+  //     .required("Requested Date is required")
+  //     .typeError("Invalid date format")
+  //     .min(new Date(), "Requested date cannot be in the past"),
+  //   status: yup.string().required("Status is required"),
+  //   items: yup.array().of(
+  //     yup.object().shape({
+  //       item: yup.object().shape({
+  //         id: yup.number(),
+  //         name: yup.string().required("Item name is required")
+  //       }),
+  //       category: yup.string().required("Category is required"),
+  //       subcategory: yup.string().required("Subcategory is required"),
+  //       quantity: yup.number() // Add this validation
+  //         .required("Quantity is required")
+  //         .min(1, "Quantity must be at least 1")
+  //         .integer("Quantity must be a whole number"),
+  //       suppliers: yup.array().of(
+  //         yup.object().shape({
+  //           supplierId: yup.number(),
+  //           supplierName: yup.string().required("Supplier name is required"),
+  //           selected: yup.boolean()
+  //         })
+  //       )
+  //     })
+  //   )
+    
+  // });
+
+
+    // Enhanced validation schema with proper error handling for nested arrays
+ 
+    const requestSchema = yup.object().shape({
     department: yup.string()
-      .required("Department is required"),
+      .required("Department is required")
+      .min(2, "Department must be at least 2 characters")
+      .max(50, "Department cannot exceed 50 characters")
+      .matches(/^[a-zA-Z\s]+$/, "Department can only contain letters and spaces"),
+
     date_requested: yup.date()
       .required("Requested Date is required")
-      .typeError("Invalid date format"),
-    status: yup.string().required("Status is required"),
-    items: yup.array().of(
-      yup.object().shape({
-        item: yup.object().shape({
-          id: yup.number(),
-          name: yup.string().required("Item name is required")
-        }),
-        category: yup.string().required("Category is required"),
-        subcategory: yup.string().required("Subcategory is required"),
-        quantity: yup.number() // Add this validation
-          .required("Quantity is required")
-          .min(1, "Quantity must be at least 1")
-          .integer("Quantity must be a whole number"),
-        suppliers: yup.array().of(
-          yup.object().shape({
-            supplierId: yup.number(),
-            supplierName: yup.string().required("Supplier name is required"),
-            selected: yup.boolean()
-          })
-        )
-      })
-    )
-  });
+      .typeError("Invalid date format")
+      .min(new Date(), "Requested date cannot be in the past"),
 
+    status: yup.string()
+      .required("Status is required")
+      .oneOf(['pending', 'approved', 'rejected', 'in-progress', 'completed'], "Invalid status"),
+
+    items: yup.array()
+      .of(
+        yup.object().shape({
+          item: yup.object().shape({
+            id: yup.number()
+              .min(0, "Invalid item ID")
+              .typeError("Item ID must be a number"),
+            name: yup.string()
+          }),
+          itemName: yup.string()
+            .required("Item name is required")
+            .min(2, "Item name must be at least 2 characters")
+            .max(100, "Item name cannot exceed 100 characters")
+            .test('trim-check', 'Item name cannot be empty spaces', function (value) {
+              return value ? value.trim().length > 0 : false;
+            }),
+          category: yup.string()
+            .required("Category is required")
+            .min(2, "Category must be at least 2 characters")
+            .max(50, "Category cannot exceed 50 characters")
+            .test('trim-check', 'Category cannot be empty spaces', function (value) {
+              return value ? value.trim().length > 0 : false;
+            }),
+          subcategory: yup.string()
+            .required("Subcategory is required")
+            .min(2, "Subcategory must be at least 2 characters")
+            .max(50, "Subcategory cannot exceed 50 characters")
+            .test('trim-check', 'Subcategory cannot be empty spaces', function (value) {
+              return value ? value.trim().length > 0 : false;
+            }),
+          quantity: yup.string()
+            .required("Quantity is required")
+            .matches(/^\d+$/, "Quantity must be a positive whole number")
+            .test('min-value', 'Quantity must be at least 1', (value) => {
+              const num = parseInt(value || '0', 10);
+              return num >= 1;
+            })
+            .test('max-value', 'Quantity cannot exceed 99999', (value) => {
+              const num = parseInt(value || '0', 10);
+              return num <= 99999;
+            }),
+          suppliers: yup.array()
+            .of(
+              yup.object().shape({
+                supplierId: yup.number()
+                  .min(0, "Invalid supplier ID")
+                  .typeError("Supplier ID must be a number"),
+                supplierName: yup.string()
+                  .when('selected', {
+                    is: true,
+                    then: (schema) => schema
+                      .required("Supplier name is required")
+                      .min(2, "Supplier name must be at least 2 characters")
+                      .max(100, "Supplier name cannot exceed 100 characters")
+                      .test('trim-check', 'Supplier name cannot be empty spaces', function (value) {
+                        return value ? value.trim().length > 0 : false;
+                      }),
+                    otherwise: (schema) => schema
+                  }),
+                supplierEmail: yup.string()
+                  .when(['selected', 'isNewSupplier'], {
+                    is: (selected: boolean, isNewSupplier: boolean) => selected && isNewSupplier,
+                    then: (schema) => schema
+                      .required("Supplier email is required")
+                      .email("Invalid email format")
+                      .max(100, "Email cannot exceed 100 characters"),
+                    otherwise: (schema) => schema
+                      .nullable()
+                      .test('email-format', 'Invalid email format', function (value) {
+                        if (!value) return true;
+                        return /\S+@\S+\.\S+/.test(value);
+                      })
+                  }),
+                supplierContact: yup.string()
+                  .when(['selected', 'isNewSupplier'], {
+                    is: (selected: boolean, isNewSupplier: boolean) => selected && isNewSupplier,
+                    then: (schema) => schema
+                      .required("Supplier contact is required")
+                      .matches(/^\+?[\d\s\-\(\)]+$/, "Invalid contact number format")
+                      .min(8, "Contact number must be at least 8 digits")
+                      .max(15, "Contact number cannot exceed 15 digits"),
+                    otherwise: (schema) => schema
+                      .nullable()
+                      .test('contact-format', 'Invalid contact number format', function (value) {
+                        if (!value) return true;
+                        return /^\+?[\d\s\-\(\)]*$/.test(value);
+                      })
+                  }),
+                // supplierTel: yup.string()
+                //   .nullable()
+                //   .test('tel-format', 'Invalid telephone number format', function (value) {
+                //     if (!value) return true;
+                //     return /^\+?[\d\s\-\(\)]*$/.test(value) && value.length <= 15;
+                //   }),
+                isNewSupplier: yup.boolean(),
+                selected: yup.boolean()
+              })
+            )
+            .test('at-least-one-selected', 'At least one supplier must be selected', function (suppliers) {
+              const selectedSuppliers = suppliers?.filter(supplier => supplier.selected);
+              return selectedSuppliers && selectedSuppliers.length > 0;
+            })
+        })
+      )
+      .min(1, "At least one item is required")
+      .max(50, "Cannot exceed 50 items per request")
+      .test('items-validation', 'Please check item details', function (items) {
+        const errors: any[] = [];
+
+        items?.forEach((item, index) => {
+          if (!item.itemName?.trim()) {
+            errors.push(this.createError({
+              path: `items[${index}].itemName`,
+              message: `Item ${index + 1}: Item name is requiredt`
+            }));
+          }
+
+          if (!item.category?.trim()) {
+            errors.push(this.createError({
+              path: `items[${index}].category`,
+              message: `Item ${index + 1}: Category is requiredd`
+            }));
+          }
+
+          if (!item.subcategory?.trim()) {
+            errors.push(this.createError({
+              path: `items[${index}].subcategory`,
+              message: `Item ${index + 1}: Subcategory is required`
+            }));
+          }
+
+          const quantity = parseInt(item.quantity || '0', 10);
+          if (isNaN(quantity) || quantity < 1) {
+            errors.push(this.createError({
+              path: `items[${index}].quantity`,
+              message: `Item ${index + 1}: Valid quantity is required`
+            }));
+          }
+
+          const selectedSuppliers = item.suppliers?.filter(supplier => supplier.selected);
+          if (!selectedSuppliers || selectedSuppliers.length === 0) {
+            errors.push(this.createError({
+              path: `items[${index}].suppliers`,
+              message: `Item ${index + 1}: At least one supplier must be selected`
+            }));
+          }
+        });
+
+        if (errors.length > 0) {
+          throw new yup.ValidationError(errors);
+        }
+
+        return true;
+      }),
+
+    suggestion_items: yup.array()
+  });
 
   const formikRef = useRef<FormikProps<RequestFormValues>>(null);
 
@@ -1232,6 +1403,13 @@ const RequestsManagement: React.FC = () => {
               showSizeChanger={false}
               onChange={handlePaginationChange}
             />
+               {/* <Pagination
+                total={dataCount}
+                current={offset + 1}
+                pageSize={limit}
+                showSizeChanger={false}
+                onChange={handlePaginationChange}
+              /> */}
           </div>
 
           <Confirmation

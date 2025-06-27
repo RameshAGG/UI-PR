@@ -120,7 +120,7 @@ const PurchaseRequestPreview = () => {
       render: (text: string) => <span className="font-Montserrat text-sm">{text}</span>,
     },
     {
-      title: <span className="font-Montserrat  text-sm text-[#6D6D6D]">Item Name</span>,
+      title: <span className="font-Montserrat bg-blue  text-sm text-[#6D6D6D]">Item Name</span>,
       dataIndex: 'name',
       key: 'name',
       render: (text: string) => <span className="font-Montserrat text-sm">{text}</span>,
@@ -179,17 +179,6 @@ const PurchaseRequestPreview = () => {
           <p className="font-Montserrat text-sm text-[#444444]">Back</p>
         </div>
       </div>
-      {/* // Update your button to use the new handler */}
-      {/* <Button 
-  type="primary" 
-  icon={<DownloadOutlined />}
-  onClick={handleDownloadRfq}
-  className="flex items-center"
-  loading={loading} // Uses the existing loading state from Redux
-  disabled={loading}
->
-  Download RFQ
-</Button> */}
 
       <div className="w-full bg-white rounded-lg shadow-md">
         <div className="p-6">
@@ -199,7 +188,7 @@ const PurchaseRequestPreview = () => {
           <Divider className="my-0" />
           <div className="grid grid-cols-2 gap-6 mt-[15px]">
             <div className="flex items-start">
-              <span className="text-gray-500 w-48 font-Montserrat">Request ID</span>
+              <span className="text-gray-500 w-48  font-Montserrat">Request ID</span>
               <span className="font-semibold">{purchaseRequest?.data?.purchase_request_id}</span>
             </div>
             <div className="flex items-start">

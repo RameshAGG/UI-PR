@@ -5,6 +5,7 @@ import { decryptData } from '../../storageHelper.ts';
 const { Sider } = Layout;
 
 const items = [
+  { key: "/rfq_dashboard",icon: <img src="/assets/sidebarIcons/fluent_form-28-regular (3).svg" width="22" height="22"  alt="img"/>, label: <Link to="/rfq_dashboard">Dashboard</Link>,ability:"rfq_dashboard" },
   { key: "/requests",icon: <img src="/assets/sidebarIcons/fluent_form-28-regular (3).svg" width="22" height="22"  alt="img"/>, label: <Link to="/requests">Purchase Request</Link>,ability:"requests" },
   { key: "/rfq",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/rfq">Rfq_lists</Link>,ability:"rfq" },
   // { key: "/site-management",icon: <img src="/assets/sidebarIcons/site-05.svg" width="22" height="22"  alt="img"/>, label: <Link to="/site-management">Site Management</Link>,ability:"site-management" },

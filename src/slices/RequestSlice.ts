@@ -100,24 +100,6 @@ export const getAllRequests = createAsyncThunk<
   }
 });
 
-// In your RequestSlice.ts
-// export const getPurchasebyId = createAsyncThunk<IRequestResponse, { id: number }, { rejectValue: string }>(
-//   "requests/getPurchasebyId",
-//   async ({ id }, { rejectWithValue }) => {
-//     try {
-//       const response = await Axios.get<IRequestResponse>(`purchase-request/${id}`);
-//       return response.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
-
-
-
-
-
-
 export const getPurchasebyId = createAsyncThunk<
   IRequestResponse,
   { id: number },
@@ -131,10 +113,6 @@ export const getPurchasebyId = createAsyncThunk<
     return rejectWithValue(error.response.data);
   }
 });
-
-
-
-
 
 
 // Async thunk to create a suggestion item
@@ -161,7 +139,7 @@ export const createSuggestionSupplier = createAsyncThunk<
   { rejectValue: string }
 >('requests/createSuggestionSupplier', async (payload, { rejectWithValue }) => {
   try {
-    const response = await Axios.post<IRequestResponse>('suggestion-supplier', payload);
+    const response = await Axios.post<IRequestResponse>('suggestion-suppliers', payload);
     if (!response.data.success) {
       return rejectWithValue(response.data.message);
     }
@@ -170,115 +148,6 @@ export const createSuggestionSupplier = createAsyncThunk<
     return rejectWithValue(error.response?.data?.message || 'Failed to create suggestion supplier');
   }
 });
-
-// Async thunk to create a new purchase request with handling for both scenarios
-// export const createPurchaseRequest = createAsyncThunk<
-//   IRequestResponse,
-//   CreatePurchaseRequestPayload,
-//   { rejectValue: string }
-// >('requests/createPurchaseRequest', async (payload, { rejectWithValue }) => {
-//   try {
-//     // Process items and create necessary suggestions
-//     const processedItems = await Promise.all(payload.items.map(async (item) => {
-//       if (!item.item_type) {
-//         // For new items, create suggestion first
-//         const suggestionItemResponse = await Axios.post<IRequestResponse>('suggestion-item', {
-//           item_name: item.item_name,
-//           category: item.category,
-//           sub_category: item.sub_category
-//         });
-
-//         if (!suggestionItemResponse.data.success) {
-//           throw new Error(suggestionItemResponse.data.message);
-//         }
-
-//         // Process suppliers for new items
-//         const processedSuppliers = await Promise.all(item.supplier.map(async (supplier) => {
-//           if (supplier.is_new_supplier) {
-//             const suggestionSupplierResponse = await Axios.post<IRequestResponse>('suggestion-supplier', {
-//               name: supplier.name,
-//               email: supplier.email,
-//               mob_num: supplier.mob_num,
-//               tel_num: supplier.tel_num
-//             });
-
-//             if (!suggestionSupplierResponse.data.success) {
-//               throw new Error(suggestionSupplierResponse.data.message);
-//             }
-
-//             return {
-//               ...supplier,
-//               supplier_id: suggestionSupplierResponse.data.data.listData[0].id,
-//               is_new_supplier: false // Mark as existing after creation
-//             };
-//           }
-//           return {
-//             ...supplier,
-//             is_new_supplier: false // Mark as existing
-//           };
-//         }));
-
-//         return {
-//           ...item,
-//           item_id: suggestionItemResponse.data.data.listData[0].id,
-//           item_type: true, // Mark as existing after creation
-//           supplier: processedSuppliers
-//         };
-//       }
-
-//       // For existing items, process suppliers
-//       const processedSuppliers = await Promise.all(item.supplier.map(async (supplier) => {
-//         if (supplier.is_new_supplier) {
-//           const suggestionSupplierResponse = await Axios.post<IRequestResponse>('suggestion-supplier', {
-//             name: supplier.name,
-//             email: supplier.email,
-//             mob_num: supplier.mob_num,
-//             tel_num: supplier.tel_num
-//           });
-
-//           if (!suggestionSupplierResponse.data.success) {
-//             throw new Error(suggestionSupplierResponse.data.message);
-//           }
-
-//           return {
-//             ...supplier,
-//             supplier_id: suggestionSupplierResponse.data.data.listData[0].id,
-//             is_new_supplier: false // Mark as existing after creation
-//           };
-//         }
-//         return {
-//           ...supplier,
-//           is_new_supplier: false // Mark as existing
-//         };
-//       }));
-
-//       return {
-//         ...item,
-//         supplier: processedSuppliers
-//       };
-//     }));
-
-//     // Create the final purchase request with processed items
-//     const response = await Axios.post<IRequestResponse>('purchase-request', {
-//       ...payload,
-//       items: processedItems.map(item => ({
-//         ...item,
-//         item_type: true, // All items are now existing
-//         supplier: item.supplier.map(supplier => ({
-//           ...supplier,
-//           is_new_supplier: false // All suppliers are now existing
-//         }))
-//       }))
-//     });
-
-//     if (!response.data.success) {
-//       return rejectWithValue(response.data.message);
-//     }
-//     return response.data;
-//   } catch (error: any) {
-//     return rejectWithValue(error.response?.data?.message || 'Failed to create purchase request');
-//   }
-// });
 
 
 export const createPurchaseRequest = createAsyncThunk<
@@ -305,8 +174,6 @@ export const createPurchaseRequest = createAsyncThunk<
             throw new Error(suggestionItemResponse.data.message);
           }
 
-          // itemId = suggestionItemResponse.data.data.listData[0].id;
-          // itemId = suggestionItemResponse.data.data.id;
           itemId = null;
           itemType = false; // Mark it as now created
         }
@@ -315,7 +182,7 @@ export const createPurchaseRequest = createAsyncThunk<
         const processedSuppliers = await Promise.all(
           item.supplier.map(async (supplier) => {
             if (supplier.is_new_supplier) {
-              const suggestionSupplierResponse = await Axios.post<IRequestResponse>('suggestion-supplier', {
+              const suggestionSupplierResponse = await Axios.post<IRequestResponse>('suggestion-suppliers', {
                 name: supplier.name,
                 email: supplier.email,
                 mob_num: supplier.mob_num,
@@ -328,7 +195,7 @@ export const createPurchaseRequest = createAsyncThunk<
 
               return {
                 ...supplier,
-                supplier_id: suggestionSupplierResponse.data.data.listData[0].id,
+                supplier_id: null,
                 is_new_supplier: false,
               };
             }

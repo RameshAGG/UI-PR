@@ -23,17 +23,17 @@ import HandOverSlice from '../slices/HandOverslice.ts';
 
 
 
-    import requestReducer from '../slices/RequestSlice.ts';
-    import itemReducer from '../slices/itemSlice.ts';
-    import SupplierSlice from '../slices/SupplierSlice.ts';
-    // import rfqDataReducer from '../slices/RfqDataSlice';
+import requestReducer from '../slices/RequestSlice.ts';
+import itemReducer from '../slices/itemSlice.ts';
+import itemPricesSlice from '../slices/itemPricesSlice.ts';
+import SupplierSlice from '../slices/SupplierSlice.ts';
 
-    const store = configureStore({
-        reducer: {
-            requestManagement: requestReducer,
-            items: itemReducer, // ✅ register here
-            suppliers: SupplierSlice,
-            // rfqData: rfqDataReducer,
+const store = configureStore({
+    reducer: {
+        requestManagement: requestReducer,
+        items: itemReducer, // ✅ register here
+        suppliers: SupplierSlice,
+        itemPrices: itemPricesSlice,
 
 
 
@@ -43,23 +43,23 @@ import HandOverSlice from '../slices/HandOverslice.ts';
 
 
         userRegister: userRegisterSlice,
-        materialCategory:MaterialCategorySlice,
-        MasterSlice:MasterSlice,
-        MeterialMasterSlice:MeterialMasterSlice,
+        materialCategory: MaterialCategorySlice,
+        MasterSlice: MasterSlice,
+        MeterialMasterSlice: MeterialMasterSlice,
         MaterialListMaster: materialListMasterSlice,
         siteManagement: siteManagementReducer,
         towerManagement: TowerManagementSlice,
         dashboard: dashboardReducer,
         PriorityMasterSlice: PriorityMasterSlice,
-        RoleMaster:RoleMasterslice,
+        RoleMaster: RoleMasterslice,
         accessoryMaster: accessoryMaster,
         accessoriesListMaster: accessoriesListMasterSlice,
-        MaterialRequest:MaterialRequestSlice,
+        MaterialRequest: MaterialRequestSlice,
         materialAllocation: materialAllocationSlice,
         vendorManagement: vendorManagementSlice,
         breadcrumb: breadcrumbReducer,
         repetition: repetitionReducer,
-        handOver:HandOverSlice
+        handOver: HandOverSlice
     }
 });
 

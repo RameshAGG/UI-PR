@@ -73,48 +73,7 @@ const PurchaseRequestPreview = () => {
         total_suppliers: purchaseRequest.data.total_suppliers
     })) || [];
 
-    // const itemColumns = [
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">Item Name</span>,
-    //     dataIndex: 'name',
-    //     key: 'name',
-    //     render: () => <span className="font-Montserrat text-sm">{itemDetails.name}</span>,
-    //   },
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">UOM</span>,
-    //     dataIndex: 'uom',
-    //     key: 'uom',
-    //     render: () => <span className="font-Montserrat text-sm">{purchaseRequest.data.items.uom}</span>,
-    //   },
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">Item Code</span>,
-    //     dataIndex: 'item_code',
-    //     key: 'item_code',
-    //     render: (text: string) => <span className="font-Montserrat text-sm">{text}</span>,
-    //   },
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">ERP Code</span>,
-    //     dataIndex: 'erp_code',
-    //     key: 'erp_code',
-    //     render: (text: string) => <span className="font-Montserrat text-sm">{text}</span>,
-    //   },
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">Date Requested</span>,
-    //     key: 'date_requested',
-    //     render: () => <span className="font-Montserrat text-sm">{purchaseRequest?.data?.date_requested}</span>,
-    //   },
-    //   {
-    //     title: <span className="font-Montserrat text-sm text-[#6D6D6D]">Status</span>,
-    //     key: 'status',
-    //     render: () => (
-    //       <span className="font-Montserrat text-sm capitalize bg-yellow-100 px-2 py-1 rounded">
-    //         {purchaseRequest?.data?.status}
-    //       </span>
-    //     ),
-    //   },
-    // ];
 
-    // Update the itemColumns definition
     const itemColumns = [
         {
             title: <span className="font-Montserrat text-sm text-[#6D6D6D]">Request ID</span>,
@@ -291,28 +250,6 @@ const PurchaseRequestPreview = () => {
                 <div className="p-6 border-gray-100">
                     <h3 className="text-[#0F44BE] font-Montserrat text-base font-semibold mb-[5px]">ITEM DETAILS</h3>
                     <Divider className="my-0" />
-                    {/* <Table
-            columns={itemColumns}
-            dataSource={itemDetails}
-            rowKey="id"
-            pagination={false}
-            className="mt-4"
-            bordered
-            size="middle"
-          /> */}
-                    {/* <PaginatedTable
-            columns={itemColumns}
-            dataSource={itemDetails}
-            rowKey="id"
-            currentPage={currentPage}
-            totalItems={itemDetails.length} // Or your total count from API for server-side pagination
-            pageSize={pageSize}
-            onPageChange={handlePageChange}
-            paginationClassName="mr-4"
-            bordered
-            size="middle"
-          /> */}
-
                     <PaginatedTable
                         columns={itemColumns}
                         dataSource={itemDetails}

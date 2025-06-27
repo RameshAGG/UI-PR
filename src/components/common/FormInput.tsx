@@ -11,6 +11,7 @@ interface FormInputProps {
   type: "text" | "password" | "email" | "select" | "date" | "number" | "checkbox";
   placeholder?: string;
   options?: { label: string; value: string | number }[];
+  // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   disabledDate?: (current: dayjs.Dayjs) => boolean;
   disabled?: boolean;
@@ -27,6 +28,7 @@ const FormInput: React.FC<FormInputProps & FieldHookConfig<string>> = ({
   type,
   options,
   error,
+  onChange,
   disabledDate,
   disabled,
   checked,

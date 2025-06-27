@@ -15,6 +15,7 @@ import BulkUpload from "../screens/Bulk_Upload/BulkUpload.tsx";
 import RfqRequestPreview from "../screens/requests/RfqRequestPreview.tsx";
 import RFQ_Upload from "../screens/Managements/RFQ_Upload.tsx";
 import RfqUploadPriview from "../screens/requests/RfqUploadPriview.tsx";
+import RFQDashboard from "../screens/requests/RFQDashboard.tsx";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -27,6 +28,7 @@ const AppRoutes = () => {
             {/* <Route element={<AuthGuard><LayoutComponent /></AuthGuard>}> */}
             <Route element={<LayoutComponent />}>
 
+                <Route path="rfq_dashboard" element={<RFQDashboard />} />
                 <Route path="rfq" element={<Items />} />
                 <Route path="requests" element={<Requests />} />
                 <Route path="Rfq_Upload" element={<RFQ_Upload />} />

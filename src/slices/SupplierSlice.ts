@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import Axios from '../axios-config/axiosInstance.ts';
+import { ReactNode } from 'react';
 
 interface SupplierState {
   suppliers: ISupplier[];
@@ -32,6 +33,9 @@ interface ISupplierDetails {
 }
 
 interface ISupplier {
+  mob_num: ReactNode;
+  name: ReactNode;
+  email: ReactNode;
   id: number;
   supplier_name: string;
   supplier_code: string;
